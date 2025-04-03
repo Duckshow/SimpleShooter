@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "ShooterCharacter.h"
+#include "PatrolPath.h"
 
 void AShooterAIController::BeginPlay() 
 {
@@ -16,7 +17,12 @@ void AShooterAIController::BeginPlay()
 
 		if (Blackboard)
 		{
-			Blackboard->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
+			Blackboard->SetValueAsVector(StartLocationBlackboardkey, GetPawn()->GetActorLocation());
+
+			if (AShooterCharacter* ControlledCharacter = Cast<AShooterCharacter>(GetPawn()))
+			{
+				Blackboard->SetValueAsObject(PatrolPathBlackboardkey, Cast<UObject>(ControlledCharacter->GetPatrolPath()));
+			}
 		}
 	}
 }

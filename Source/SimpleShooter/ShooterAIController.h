@@ -22,9 +22,12 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	//UPROPERTY(EditAnywhere)
-	//float ClosestMoveDistance = 200.f;
-
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	class UBehaviorTree* AIBehavior;
+
+	UPROPERTY(EditDefaultsOnly)
+	FName StartLocationBlackboardkey;
+
+	UPROPERTY(EditDefaultsOnly)
+	FName PatrolPathBlackboardkey;
 };

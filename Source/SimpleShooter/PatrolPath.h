@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "BP_PatrolPath.generated.h"
+#include "PatrolPath.generated.h"
 
 UCLASS()
 class SIMPLESHOOTER_API APatrolPath : public AActor
@@ -13,17 +13,16 @@ class SIMPLESHOOTER_API APatrolPath : public AActor
 	
 public:	
 	// Sets default values for this actor's properties
-	ABP_PatrolPath();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	APatrolPath();
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	TTuple<FVector, float> FindStartingPoint(const FVector& ActorWorldLocation) const;
+	FVector GetNextLocation(float& Key, int& DirectionSign) const;
 
 private:
-	UPROPERTY(VisibleAnywhere)
-	class USplineComponent* PathSpline;
+	UPROPERTY()
+	TObjectPtr<class USplineComponent> Spline;
+
+	UPROPERTY(EditAnywhere, Category = "Path")
+	float WaitTimeAtSplineEnd = 3.f;
 };

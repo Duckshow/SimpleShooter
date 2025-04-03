@@ -7,6 +7,7 @@
 #include "ShooterCharacter.generated.h"
 
 class AGun;
+class APatrolPath;
 
 UCLASS()
 class SIMPLESHOOTER_API AShooterCharacter : public ACharacter
@@ -27,6 +28,8 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	float GetHealthPercent() const;
+
+	TObjectPtr<APatrolPath> GetPatrolPath() const;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -55,6 +58,9 @@ private:
 
 	UPROPERTY()
 	AGun* GunInstance = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<APatrolPath> PatrolPath;
 
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth = 100.f;

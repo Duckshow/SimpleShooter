@@ -1,30 +1,41 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BP_PatrolPath.h"
+#include "PatrolPath.h"
 #include "Components/SplineComponent.h"
 
-// Sets default values
 APatrolPath::APatrolPath()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
-	PathSpline = CreateDefaultSubobject<USplineComponent>(TEXT("Path Spline"));
-	RootComponent = PathSpline;
+	Spline = CreateDefaultSubobject<USplineComponent>(TEXT("Path Spline"));
+	RootComponent = Spline;
 }
 
-// Called when the game starts or when spawned
-void APatrolPath::BeginPlay()
+TTuple<FVector, float> APatrolPath::FindStartingPoint(const FVector& ActorWorldLocation) const 
 {
-	Super::BeginPlay();
+	Spline->Duration = Spline->GetSplineLength();
+	ESplineCoordinateSpace::Type Space = ESplineCoordinateSpace::World;
+
+	float Key = Spline->FindInputKeyClosestToWorldLocation(ActorWorldLocation);
+	FVector ClosestLocationOnSpline = Spline->GetLocationAtSplineInputKey(Key, Space);
+
+	return TTuple<FVector, float>(ClosestLocationOnSpline, Key);
+}
+
+FVector APatrolPath::GetNextLocation(float& KeyRef, int& DirectionSignRef) const 
+{
+	int RoundedKey = FMath::RoundToInt(KeyRef);
+	int KeyCount = Spline->SplineCurves.Position.Points.Num();
 	
+	if (RoundedKey == 0)
+	{
+		DirectionSignRef = 1;
+	}
+	else if (RoundedKey == KeyCount - 1)
+	{
+		DirectionSignRef = -1;
+	}
+
+	KeyRef = RoundedKey + DirectionSignRef;
+
+	return Spline->GetLocationAtSplineInputKey(KeyRef, ESplineCoordinateSpace::World);
 }
-
-// Called every frame
-void APatrolPath::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-

@@ -7,6 +7,7 @@
 #include "Gun.h"
 #include "Components/CapsuleComponent.h"
 #include "ShooterGameModeBase.h"
+#include "PatrolPath.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -35,6 +36,11 @@ bool AShooterCharacter::IsDead() const
 float AShooterCharacter::GetHealthPercent() const
 {
 	return Health / MaxHealth;
+}
+
+TObjectPtr<APatrolPath> AShooterCharacter::GetPatrolPath() const
+{
+	return PatrolPath;
 }
 
 // Called every frame
