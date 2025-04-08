@@ -39,7 +39,7 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	TTuple<FVector, float> StartingPointAndKey= PatrolPath->FindStartingPoint(Character->GetActorLocation());
 
 	CurrentKey = StartingPointAndKey.Get<float>();
-	DirectionSign = CurrentKey - FMath::RoundToInt(CurrentKey) < 0.f ? -1 : 1;
+	DirectionSign = CurrentKey - (FMath::RoundToInt(CurrentKey) + 0.5f) < 0.f ? -1 : 1;
 
 	UAIBlueprintHelperLibrary::SimpleMoveToLocation(AI, StartingPointAndKey.Get<FVector>());
 	
